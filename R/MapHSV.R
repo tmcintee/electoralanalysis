@@ -92,7 +92,7 @@ MapHSV <- function(df,
                              color = "black",
                              alpha = 1)
     crucial_geom <- geom_segment(data=lines, aes(x= x, y = y , xend = xend, yend = yend),
-                 inherit.aes = F,alpha = 0.5, color = "gray")
+                 inherit.aes = F,color = "black")
   }
   else
   {
@@ -107,7 +107,7 @@ MapHSV <- function(df,
                              pch="?",size = 2,
                              x = pivot_x,
                              y = pivot_y,
-                             color = "gray",alpha = 0.5)
+                             color = "black")
   }
   g <- ggplot(df, aes(map_id=State,fill = Party, alpha = Votes))+
     scale_fill_manual(values = colorVector)+
