@@ -31,11 +31,13 @@ MapHSV <- function(df,
     mutate(g_n = parse_number(str_extract(group,"[1234567890]"))) %>%
     filter(g_n == min(g_n))
   pivmap_list <- pivot_state_map %>% select(long,lat,id) %>% group_split(id)
+  #workaround
+  piv_select <- list()
   for(i in 1:length(pivmap_list))
   {
-    pivmap_list[[i]] <- pivmap_list[[i]] %>% select(long,lat)
+    piv_select[[i]] <- pivmap_list[[i]] %>% select(long,lat)
   }
-  pivot_centroids <- lapply(pivmap_list,geosphere::centroid)
+  pivot_centroids <- lapply(piv_select,geosphere::centroid)
   pivot_x <- numeric(length(pivot_centroids))
   pivot_y <- numeric(length(pivot_centroids))
   for(i in 1:length(pivot_centroids))
