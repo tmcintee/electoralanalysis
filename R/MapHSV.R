@@ -105,7 +105,7 @@ MapHSV <- function(df,
                              y = pivot_y,
                              color = "black",alpha = 0.5)
     crucial_geom <- geom_point(data = df %>% filter(State %in% pivot_state$State),
-                             pch="?",size = 1,
+                             pch="?",size = 2,
                              x = pivot_x,
                              y = pivot_y,
                              color = "black")
