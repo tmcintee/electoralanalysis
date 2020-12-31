@@ -31,7 +31,6 @@ MapHSV <- function(df,
     mutate(g_n = parse_number(str_extract(group,"[1234567890]"))) %>%
     filter(g_n == min(g_n))
   pivmap_list <- pivot_state_map %>% select(long,lat,id) %>% group_split(id)
-  #workaround
   piv_select <- list()
   for(i in 1:length(pivmap_list))
   {
@@ -94,7 +93,7 @@ MapHSV <- function(df,
                              color = "black",
                              alpha = 1)
     crucial_geom <- geom_segment(data=lines, aes(x= x, y = y , xend = xend, yend = yend),
-                 inherit.aes = F,color = "black")
+                 inherit.aes = F,color = "black",alpha = 0.5)
   }
   else
   {
@@ -106,7 +105,7 @@ MapHSV <- function(df,
                              y = pivot_y,
                              color = "black",alpha = 0.5)
     crucial_geom <- geom_point(data = df %>% filter(State %in% pivot_state$State),
-                             pch="?",size = 2,
+                             pch="?",size = 1,
                              x = pivot_x,
                              y = pivot_y,
                              color = "black")
