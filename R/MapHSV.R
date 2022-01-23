@@ -11,6 +11,7 @@ MapHSV <- function(df,
   {
     df$State[df$State == "virginia"] <- "virginia1860"
   }
+  used_map <- base_map %>% filter(id %in% df$State)
   manual_pivots <- tolower(manual_pivots)
   if(length(manual_pivots) == 0)
   {
@@ -61,7 +62,7 @@ MapHSV <- function(df,
   }
   if(is.null(colorVector))
   {
-    colorVector <- c("blue","red","gold","green","purple")
+    colorVector <- c("blue","firebrick3","gold2","forestgreen","magenta3")
     if(str_detect(parties[[2]],".D"))
     {
       colorVector <- colorVector[c(2,1,3,4,5)]
@@ -119,7 +120,8 @@ MapHSV <- function(df,
     scale_y_continuous(breaks = NULL) +
     labs(x = "", y = "",color = "",alpha = "") +
     theme(legend.position = "bottom",
-          panel.background = element_blank())+
+          panel.background = element_blank(),
+          plot.margin = margin(0,0,0,0,"pt"))+
     guides(fill = FALSE,
            alpha = FALSE)
   big <- g+
@@ -130,5 +132,9 @@ MapHSV <- function(df,
   little <- g+
     geom_map(map = base_map, data = df %>% filter(Votes !=0), color = "gray")+
     facet_wrap(~Party,nrow = 1)
-  ggpubr::ggarrange(big,little,ncol = 1,heights = c(2,1))
+  ggpubr::ggarrange(big,
+                    little,
+                    ncol = 1,
+                    heights = c(2,1))+
+    theme(plot.margin = margin(-0.5,-1,-0.5,-1, "cm"))
 }
