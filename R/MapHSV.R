@@ -11,7 +11,6 @@ MapHSV <- function(df,
   {
     df$State[df$State == "virginia"] <- "virginia1860"
   }
-  used_map <- base_map %>% filter(id %in% df$State)
   manual_pivots <- tolower(manual_pivots)
   if(length(manual_pivots) == 0)
   {
@@ -94,7 +93,7 @@ MapHSV <- function(df,
                              color = "black",
                              alpha = 1)
     crucial_geom <- geom_segment(data=lines, aes(x= x, y = y , xend = xend, yend = yend),
-                 inherit.aes = F,color = "black",alpha = 0.5)
+                 inherit.aes = F,color = "black",alpha = 0.3,size =0.1)
   }
   else
   {
@@ -121,7 +120,7 @@ MapHSV <- function(df,
     labs(x = "", y = "",color = "",alpha = "") +
     theme(legend.position = "bottom",
           panel.background = element_blank(),
-          plot.margin = margin(0,0,0,0,"pt"))+
+          plot.margin = margin(0,0,0,0,"cm"))+
     guides(fill = FALSE,
            alpha = FALSE)
   big <- g+
