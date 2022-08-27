@@ -30,11 +30,11 @@ MapSimple <- function(df,base_map = fifty_states_mod,colorVector = c("red","blue
     scale_y_continuous(breaks = NULL) +
     labs(x = "", y = "",color = "",alpha = "") +
     theme(legend.position = "bottom",
-          panel.background = element_blank())+
+          panel.background = element_blank(),
+          plot.margin = margin(0,0,0,0,"cm"))+
     guides(fill = FALSE,
            alpha = FALSE)
   big <- g+
 		geom_map(map = base_map, color = "gray")
   return(big)
-
 }

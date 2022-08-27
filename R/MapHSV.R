@@ -131,9 +131,10 @@ MapHSV <- function(df,
   little <- g+
     geom_map(map = base_map, data = df %>% filter(Votes !=0), color = "gray")+
     facet_wrap(~Party,nrow = 1)
+  nPanel <- nrow(summary_party)
   ggpubr::ggarrange(big,
                     little,
                     ncol = 1,
-                    heights = c(2,1))+
+                    heights = c(1+0.5*nPanel,1))+
     theme(plot.margin = margin(-0.5,-1,-0.5,-1, "cm"))
 }
