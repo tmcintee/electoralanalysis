@@ -5,6 +5,7 @@ MapHSV <- function(df,
                    colorVector = NULL,
                    manual_names = NULL)
 {
+  require(ggstar)
   df <- df %>% mutate(State = tolower(State))
   #Add old_virginia
   if(!"west virginia" %in% df$State)
@@ -25,7 +26,9 @@ MapHSV <- function(df,
   else
   {
     pivot_state <- df %>% filter(State %in% manual_pivots)
+    crucial_states <- df %>% filter(State %in% manual_pivots)
   }
+  #Create pivot centroids.
   pivot_state_map <- base_map %>%
     filter(id %in% pivot_state$State) %>%
     mutate(g_n = parse_number(str_extract(group,"[1234567890]"))) %>%
@@ -44,6 +47,26 @@ MapHSV <- function(df,
     pivot_x[[i]] <- pivot_centroids[[i]][[1]]
     pivot_y[[i]] <- pivot_centroids[[i]][[2]]
   }
+  #Calculate crucial state centroids.
+  crucial_state_map <- base_map %>%
+    filter(id %in% crucial_states$State) %>%
+    mutate(g_n = parse_number(str_extract(group,"[1234567890]"))) %>%
+    filter(g_n == min(g_n))
+  crumap_list <- crucial_state_map %>% select(long,lat,id) %>% group_split(id)
+  cru_select <- list()
+  for(i in 1:length(crumap_list))
+  {
+    cru_select[[i]] <- crumap_list[[i]] %>% select(long,lat)
+  }
+  crucial_centroids <- lapply(cru_select,geosphere::centroid)
+  crucial_x <- numeric(length(crucial_centroids))
+  crucial_y <- numeric(length(crucial_centroids))
+  for(i in 1:length(crucial_centroids))
+  {
+    crucial_x[[i]] <- crucial_centroids[[i]][[1]]
+    crucial_y[[i]] <- crucial_centroids[[i]][[2]]
+  }
+  #Critical state outlines.
   crit_states <- CriticalStates(df)
   elecVoteCols <- grep(names(df),pattern = "^Elec")
   stateCol <- grep(names(df),pattern = "State")
@@ -85,25 +108,35 @@ MapHSV <- function(df,
   }
   if(length(manual_pivots) == 0)
   {
-    pivot_geom <- geom_point(#pch="\u2605", <= Unfortunately does not work with pdf rendering.
-                             shape = 17,
-                             size = 5,
-                             x = pivot_x,
-                             y = pivot_y,
-                             color = "black",
-                             alpha = 1)
-    crucial_geom <- geom_segment(data=lines, aes(x= x, y = y , xend = xend, yend = yend),
-                 inherit.aes = F,color = "black",alpha = 0.3,size =0.1)
+    pivot_geom <- geom_star(size = 5,
+                            x = pivot_x,
+                            y = pivot_y,
+                            fill = "white",
+                            color = "black")
+      #geom_point(#pch="\u2605", <= Unfortunately does not work with pdf rendering.
+                             #shape = 17,
+                             #size = 5,
+                             #x = pivot_x,
+                             #y = pivot_y,
+                             #color = "black",
+                             #alpha = 1)
+    crucial_geom <- geom_star(size = 3,
+                              data = df %>% filter(State %in% crucial_states$State),
+                              x = crucial_x,
+                              y = crucial_y,
+                              fill = "white",
+                              color = "black",
+                              alpha = 1)
+    #crucial_geom <- geom_segment(data=lines, aes(x= x, y = y , xend = xend, yend = yend),
+                 #inherit.aes = F,color = "black",alpha = 0.3,size =0.1)
   }
   else
   {
-    pivot_geom <- geom_point(data = df %>% filter(State %in% pivot_state$State),
-                             #pch="\u2605", <= Unfortunately does not work with pdf rendering.
-                             shape = 17,
-                             size = 5,
-                             x = pivot_x,
-                             y = pivot_y,
-                             color = "black",alpha = 0.5)
+    pivot_geom <- geom_star(size = 5,
+                            x = pivot_x,
+                            y = pivot_y,
+                            fill = "white",
+                            color = "black")
     crucial_geom <- geom_point(data = df %>% filter(State %in% pivot_state$State),
                              pch="?",size = 2,
                              x = pivot_x,
