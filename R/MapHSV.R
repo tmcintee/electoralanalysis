@@ -133,6 +133,7 @@ MapHSV <- function(df,
   else
   {
     pivot_geom <- geom_star(size = 5,
+                            data = df %>% filter(State %in% pivot_states$State),
                             x = pivot_x,
                             y = pivot_y,
                             fill = "white",
