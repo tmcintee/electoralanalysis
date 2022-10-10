@@ -132,17 +132,19 @@ MapHSV <- function(df,
   }
   else
   {
-    pivot_geom <- geom_star(size = 5,
-                            data = df %>% filter(State %in% pivot_states$State),
+    crucial_geom <- geom_star(size = 5,
+                            data = df %>% filter(State %in% pivot_state$State),
                             x = pivot_x,
                             y = pivot_y,
                             fill = "white",
-                            color = "black")
-    crucial_geom <- geom_point(data = df %>% filter(State %in% pivot_state$State),
+                            color = "black",
+                            alpha = 1)
+    pivot_geom <- geom_point(data = df %>% filter(State %in% pivot_state$State),
                              pch="?",size = 2,
                              x = pivot_x,
                              y = pivot_y,
-                             color = "black")
+                             color = "black",
+                             alpha = 1)
   }
   g <- ggplot(df, aes(map_id=State,fill = Party, alpha = Votes))+
     scale_fill_manual(values = colorVector)+
