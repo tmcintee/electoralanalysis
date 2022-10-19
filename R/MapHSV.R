@@ -171,6 +171,6 @@ MapHSV <- function(df,
   ggpubr::ggarrange(big,
                     little,
                     ncol = 1,
-                    heights = c(1+0.5*nPanel,1))+
+                    heights = c(1+0.5*nPanel-0.3*(nPanel==4),1))+
     theme(plot.margin = margin(-0.5,-1,-0.5,-1, "cm"))
 }
